@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "rootDir": ".",          // Racine du projet
+    "outDir": "./dist",      // Dossier de sortie
+    "strict": true,          // Vérifications strictes
+    "esModuleInterop": true, // Interopérabilité avec les modules ES
+    "skipLibCheck": true,    // Ignore les vérifications des types des bibliothèques
+    "baseUrl": ".",          // Définit la base des chemins relatifs
+    "paths": {
+      "@src/*": ["src/*"]    // Alias pour tous les fichiers dans src/
+    }
+  },
+  "include": [
+    "src/**/*"               // Inclure tous les fichiers dans src/
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
