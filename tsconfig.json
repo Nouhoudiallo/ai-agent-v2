@@ -10,7 +10,8 @@
     "baseUrl": ".",          // Définit la base des chemins relatifs
     "paths": {
       "@src/*": ["src/*"]    // Alias pour tous les fichiers dans src/
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./generated/prisma/runtime"]
   },
   "include": [
     "src/**/*"               // Inclure tous les fichiers dans src/

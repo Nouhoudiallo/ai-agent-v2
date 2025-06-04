@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -32,24 +31,36 @@ model User {
   updatedAt   DateTime     @updatedAt
   role        ROLE         @default(USER)
   discussions Discussion[]
+  apiKeys     ApiKey[]
 }
 
-
 model Discussion {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   title     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id])
+  messages  Message[]
+}
+
+model Message {
+  id           String     @id @default(cuid())
+  content      String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  discussionId String
+  discussion   Discussion @relation(fields: [discussionId], references: [id])
+  sender       Sender
+}
+
+model ApiKey {
+  id        String   @id @default(cuid())
+  key       String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   authorId  String
-  author    User    @relation(fields: [authorId], references: [id])
-  messages  Message[]
-}
-model Message {
-  id            String   @id @default(cuid())
-  content       String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  discussionId String
-  discussion   Discussion @relation(fields: [discussionId], references: [id])
-  sender      Sender 
+  author    User     @relation(fields: [authorId], references: [id])
+
+  // Note: La restriction pour le rôle ADMIN doit être gérée au niveau de l'application.
 }
