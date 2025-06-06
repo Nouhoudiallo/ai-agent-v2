@@ -8,13 +8,12 @@
     "esModuleInterop": true, // Interopérabilité avec les modules ES
     "skipLibCheck": true,    // Ignore les vérifications des types des bibliothèques
     "baseUrl": ".",          // Définit la base des chemins relatifs
-    "paths": {
-      "@src/*": ["src/*"]    // Alias pour tous les fichiers dans src/
-    },
+    
     "typeRoots": ["./node_modules/@types", "./generated/prisma/runtime"]
   },
   "include": [
-    "src/**/*"               // Inclure tous les fichiers dans src/
+    "src/**/*",               // Inclure tous les fichiers dans src/
+    "index.ts"            // Inclure aussi le fichier index.ts à la racine
   ],
   "exclude": [
     "node_modules",

@@ -1,17 +1,14 @@
 import Prisma from "../utils/prisma";
 // Utilisation des types générés par Prisma Client
 import { ROLE, Sender } from "@prisma/client";
-// Ajout du hachage du mot de passe avant la création de l'utilisateur
-import bcrypt from "bcrypt";
 
 export async function createUser(email: string, password: string) {
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await Prisma.user.create({
       data: {
         email,
-        password: hashedPassword,
+        password
       },
     });
     return user;
@@ -93,6 +90,19 @@ export async function getUserDiscussions(userId: string) {
     return discussions;
   } catch (error) {
     console.error("Erreur lors de la récupération des discussions de l'utilisateur :", error);
+    throw error;
+  }
+}
+
+
+export async function getUserByEmail(email: string) {
+  try {
+    const user = await Prisma.user.findUnique({
+      where: { email },
+    });
+    return user;
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'utilisateur par email :", error);
     throw error;
   }
 }
