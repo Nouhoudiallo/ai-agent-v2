@@ -18,8 +18,13 @@ Bienvenue dans le projet **ai-agent-v2**. Ce projet fournit une API robuste et u
 - **Récupérer les discussions** : Récupère toutes les discussions associées à un utilisateur.
 
 ### Gestion des Clés API
-- **Créer une clé API** : Génère une clé API unique pour un utilisateur avec le rôle ADMIN.
-- **Vérifier une clé API** : Valide une clé API pour l'accès sécurisé.
+- **Créer une clé API** : Génère une clé API unique pour un utilisateur avec le rôle ADMIN (voir endpoint dédié).
+- **Vérifier une clé API** : Valide une clé API pour l'accès sécurisé à toutes les routes.
+
+### Agents et Outils
+- **Agent Gemini** : Génération de texte et réponses contextuelles via Google Gemini.
+- **Recherche Web** : Recherche d'informations sur le web via l'API Google Custom Search.
+- **Parser Gemini** : Formatage avancé des réponses Gemini.
 
 ## Installation
 
@@ -35,7 +40,7 @@ Bienvenue dans le projet **ai-agent-v2**. Ce projet fournit une API robuste et u
    ```
 
 3. Configurez les variables d'environnement :
-   Créez un fichier `.env` et ajoutez les informations nécessaires, comme l'URL de la base de données.
+   Créez un fichier `.env` et ajoutez les informations nécessaires (voir ci-dessous).
 
 4. Appliquez les migrations Prisma :
    ```bash
@@ -44,14 +49,36 @@ Bienvenue dans le projet **ai-agent-v2**. Ce projet fournit une API robuste et u
 
 5. Lancez le serveur :
    ```bash
+   npm run build
    npm start
    ```
 
+### Variables d'environnement requises
+- `DATABASE_URL` (PostgreSQL)
+- `GOOGLE_API_KEY` (pour la recherche web)
+- `GOOGLE_SEARCH_ENGINE_ID` (pour la recherche web)
+- `GOOGLE_GEMINI_API_KEY` (pour l'agent Gemini)
+
 ## Utilisation de l'API
 
-### Endpoints
+### Endpoints principaux
 
-#### POST `/api/users`
+#### POST `/ask`
+**Description** : Interroge l'agent Gemini avec une question.
+**Exemple** :
+```json
+{
+  "question": "Quelle est la capitale de la France ?"
+}
+```
+**Réponse** :
+```json
+{
+  "response": "La capitale de la France est Paris."
+}
+```
+
+#### POST `/addUser`
 **Description** : Crée un nouvel utilisateur.
 **Exemple** :
 ```json
@@ -61,82 +88,31 @@ Bienvenue dans le projet **ai-agent-v2**. Ce projet fournit une API robuste et u
 }
 ```
 
-#### POST `/api/discussions`
-**Description** : Crée une nouvelle discussion.
+#### POST `/updateUser`
+**Description** : Met à jour un utilisateur (en développement).
 **Exemple** :
 ```json
 {
-  "title": "Nouvelle discussion",
-  "authorId": "user-id"
+  "userId": "user-id",
+  "email": "nouvel@email.com"
 }
 ```
 
-#### POST `/api/messages`
-**Description** : Ajoute un message à une discussion.
-**Exemple** :
-```json
-{
-  "discussionId": "discussion-id",
-  "content": "Ceci est un message",
-  "sender": "USER"
-}
-```
+### Sécurisation des Routes
 
-## Sécurisation des Routes
-
-### Clé API Obligatoire
-Toutes les requêtes effectuées sur l'API nécessitent une clé API valide. Cette clé doit être incluse dans les en-têtes de la requête sous la forme :
-
+Toutes les routes sont protégées par une clé API à fournir dans l'en-tête :
 ```
 'x-api-key': '<votre-clé-api>'
 ```
+Sans clé API valide, l'accès est refusé (HTTP 403).
 
-Sans une clé API valide, l'accès sera refusé avec un code de statut HTTP 403.
+#### Création et gestion des clés API
+- Seuls les utilisateurs avec le rôle `ADMIN` peuvent générer une clé API.
+- La table `ApiKey` relie chaque clé à son auteur (voir migrations Prisma).
+- Utilisez le script ou endpoint dédié pour générer une clé API après avoir créé un admin.
 
-### Route pour Interroger l'Agent
-Une route sécurisée est disponible pour interroger l'agent. Voici un exemple d'utilisation :
+### Exemple d'intégration avec React
 
-#### POST `/api/agent-query`
-**Description** : Permet d'envoyer une requête à l'agent.
-**Exemple** :
-```json
-{
-  "query": "Quelle est la météo aujourd'hui ?"
-}
-```
-**En-tête requis** :
-```json
-{
-  "x-api-key": "votre-clé-api"
-}
-```
-
-**Réponse** :
-```json
-{
-  "response": "La météo est ensoleillée avec une température de 25°C."
-}
-```
-
-### Sécurisation des Routes de Gestion des Utilisateurs et Discussions
-
-Toutes les routes de gestion des utilisateurs et des discussions nécessitent également une clé API valide. Cette clé doit être incluse dans les en-têtes de la requête sous la forme :
-
-```
-'x-api-key': '<votre-clé-api>'
-```
-
-Sans une clé API valide, l'accès sera refusé avec un code de statut HTTP 403.
-
-## Exemple d'Intégration avec React
-
-### Installation
-Ajoutez Axios pour les requêtes HTTP :
-```bash
-npm install axios
-```
-
-### Exemple de Code
 ```jsx
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -145,42 +121,42 @@ const App = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [apiKey, setApiKey] = useState('');
+  const [question, setQuestion] = useState('');
+  const [response, setResponse] = useState('');
 
   const createUser = async () => {
     try {
-      const response = await axios.post('/api/users', { email, password }, {
-        headers: {
-          'x-api-key': apiKey,
-        },
+      const res = await axios.post('/addUser', { email, password }, {
+        headers: { 'x-api-key': apiKey },
       });
-      console.log('Utilisateur créé :', response.data);
+      alert('Utilisateur créé : ' + JSON.stringify(res.data));
     } catch (error) {
-      console.error('Erreur lors de la création de l'utilisateur :', error);
+      alert('Erreur : ' + error);
+    }
+  };
+
+  const askAgent = async () => {
+    try {
+      const res = await axios.post('/ask', { question }, {
+        headers: { 'x-api-key': apiKey },
+      });
+      setResponse(res.data.response);
+    } catch (error) {
+      setResponse('Erreur : ' + error);
     }
   };
 
   return (
     <div>
       <h1>Créer un utilisateur</h1>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Mot de passe"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Clé API"
-        value={apiKey}
-        onChange={(e) => setApiKey(e.target.value)}
-      />
+      <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+      <input type="password" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} />
+      <input type="text" placeholder="Clé API" value={apiKey} onChange={e => setApiKey(e.target.value)} />
       <button onClick={createUser}>Créer</button>
+      <h2>Interroger l'agent</h2>
+      <input type="text" placeholder="Votre question" value={question} onChange={e => setQuestion(e.target.value)} />
+      <button onClick={askAgent}>Envoyer</button>
+      <div>Réponse : {response}</div>
     </div>
   );
 };
@@ -188,11 +164,18 @@ const App = () => {
 export default App;
 ```
 
+## Architecture technique
+
+- **RouteAgent** : Classe utilitaire pour créer des routes Express sécurisées par clé API.
+- **Prisma** : ORM pour la gestion des utilisateurs, discussions, messages et clés API.
+- **Agents** : Intégration Gemini, recherche web, etc.
+- **Outils** : Fonctions utilitaires, parsers, gestion des variables d'environnement.
+
 ## Extensibilité
 L'agent peut être étendu pour inclure des fonctionnalités supplémentaires comme :
-- Analyse des données.
-- Intégration avec des services tiers.
-- Automatisation des tâches complexes.
+- Analyse des données
+- Intégration avec des services tiers
+- Automatisation des tâches complexes
 
 ## Support
 Pour toute question ou problème, veuillez ouvrir une issue sur le dépôt GitHub ou contacter l'équipe de développement.
