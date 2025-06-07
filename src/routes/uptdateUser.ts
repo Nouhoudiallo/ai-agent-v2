@@ -1,5 +1,8 @@
-import { Request, Response } from "express";
-
-export const handleUpdateUser = async (req: Request, res: Response) =>{
-
-}
+import {withPrisma} from "../methode/withPrisma"
+export const handleUpdateUser = withPrisma(
+  async (req, res, prisma) =>{
+    res.status(200).json({
+      message: "Update user route is not implemented yet.",
+    });
+  }
+)

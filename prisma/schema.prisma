@@ -32,6 +32,7 @@ model User {
   role        ROLE         @default(USER)
   discussions Discussion[]
   apiKeys     ApiKey[]
+  documents   Document[]   // Ajout de la relation avec Document
 }
 
 model Discussion {
@@ -40,7 +41,7 @@ model Discussion {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   authorId  String
-  author    User      @relation(fields: [authorId], references: [id])
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   messages  Message[]
 }
 
@@ -50,7 +51,7 @@ model Message {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   discussionId String
-  discussion   Discussion @relation(fields: [discussionId], references: [id])
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
   sender       Sender
 }
 
@@ -63,4 +64,24 @@ model ApiKey {
   author    User     @relation(fields: [authorId], references: [id])
 
   // Note: La restriction pour le rôle ADMIN doit être gérée au niveau de l'application.
+}
+
+model Document {
+  id          String           @id @default(cuid())
+  filename    String
+  mimetype    String
+  size        Int
+  uploadedAt  DateTime         @default(now())
+  uploaderId  String
+  uploader    User             @relation(fields: [uploaderId], references: [id])
+  chunks      DocumentChunk[]
+}
+
+model DocumentChunk {
+  id          String     @id @default(cuid())
+  content     String
+  metadata    Json
+  documentId  String
+  document    Document   @relation(fields: [documentId], references: [id])
+  index       Int        // Position du chunk dans le document
 }

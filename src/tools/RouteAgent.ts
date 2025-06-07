@@ -17,6 +17,7 @@ export class RouteAgent {
    * @param method - Méthode HTTP (GET, POST, etc.)
    * @param handler - Fonction de gestion de la route
    */
+  
   public createRoute(path: string, method: string, handler: RequestHandler): void {
     const secureHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       const apiKey = req.headers['x-api-key'];
