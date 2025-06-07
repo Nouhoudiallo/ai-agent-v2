@@ -18,7 +18,7 @@ export const handleUploadDocument = withPrisma(
           else resolve();
         });
       });
-      const file = req.file as Express.Multer.File | undefined;
+      const file = req.file 
       const { userId } = req.body; // à sécuriser selon votre auth
       if (!file) {
         res.status(400).json({ error: "Aucun fichier envoyé." });
