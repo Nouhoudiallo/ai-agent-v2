@@ -2,22 +2,22 @@ import fs from "fs/promises";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { DocxLoader } from "@langchain/community/document_loaders/fs/docx";
-import multer from "multer";
+// import multer from "multer";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
 import { withPrisma } from "../methode/withPrisma";
-const upload = multer({ dest: "uploads/" });
+// const upload = multer({ dest: "uploads/" });
 
 export const handleUploadDocument = withPrisma(
   async (req, res, prisma): Promise<void> => {
     try {
-      // Multer ne gère pas le fichier si le middleware n'est pas appelé explicitement
-      await new Promise<void>((resolve, reject) => {
-        upload.single("file")(req, res, (err: any) => {
-          if (err) reject(err);
-          else resolve();
-        });
-      });
+      // // Multer ne gère pas le fichier si le middleware n'est pas appelé explicitement
+      // await new Promise<void>((resolve, reject) => {
+      //   upload.single("file")(req, res, (err: any) => {
+      //     if (err) reject(err);
+      //     else resolve();
+      //   });
+      // });
       const file = req.file 
       const { userId } = req.body; // à sécuriser selon votre auth
       if (!file) {
