@@ -183,3 +183,108 @@ Pour toute question ou problème, veuillez ouvrir une issue sur le dépôt GitHu
 ---
 
 Merci d'utiliser **ai-agent-v2** !
+
+### Suppression d’un utilisateur et gestion des entités liées
+- **Suppression en cascade** : Lorsqu’un utilisateur est supprimé, toutes ses discussions et les messages associés sont également supprimés automatiquement grâce à la configuration `onDelete: Cascade` dans le schéma Prisma.
+- **Attention** : Si d’autres entités référencent l’utilisateur sans suppression en cascade, une erreur de contrainte étrangère peut survenir. Dans ce cas, il faut d’abord supprimer ou détacher ces entités avant de supprimer l’utilisateur.
+
+### Gestion des erreurs de suppression
+- Si la suppression échoue avec une erreur de type `Foreign key constraint violated`, cela signifie que des entités liées empêchent la suppression. Vérifiez la configuration du schéma Prisma ou supprimez d’abord les entités dépendantes.
+
+### Exemple de réponse d’erreur lors de la suppression
+```json
+{
+  "error": "Erreur lors de la suppression de l'utilisateur.",
+  "details": "Foreign key constraint violated on the constraint: Message_discussionId_fkey"
+}
+```
+
+### Mise à jour du schéma Prisma (extrait)
+```prisma
+model Discussion {
+  // ...
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  // ...
+}
+
+model Message {
+  // ...
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  // ...
+}
+```
+
+> La suppression d’un utilisateur entraîne donc la suppression de ses discussions et messages associés.
+
+### Gestion des Documents
+- **Uploader un document** : Permet d'envoyer un fichier (PDF, DOCX, TXT) qui sera découpé en morceaux (chunks) et stocké en base de données.
+- **Stockage des chunks** : Chaque document est découpé en segments de 1000 caractères avec un chevauchement de 200 caractères pour une meilleure gestion et recherche.
+- **Suppression** : Les documents et leurs chunks sont liés à l'utilisateur uploader.
+
+### Nouveaux Endpoints
+
+#### POST `/uploadDocument`
+**Description** : Permet d'uploader un document (PDF, DOCX, TXT) pour un utilisateur donné.
+**Body attendu** :
+- `file` (multipart/form-data)
+- `userId` (string)
+
+**Réponse** :
+```json
+{
+  "success": true,
+  "documentId": "id-du-document",
+  "chunks": 5
+}
+```
+
+#### POST `/addMessageToDiscussion`
+**Description** : Ajoute un message à une discussion existante.
+**Body attendu** :
+```json
+{
+  "discussionId": "id-de-la-discussion",
+  "content": "Votre message",
+  "sender": "USER" // ou "AGENT"
+}
+```
+
+#### POST `/createDiscussion`
+**Description** : Crée une nouvelle discussion pour un utilisateur.
+**Body attendu** :
+```json
+{
+  "title": "Titre de la discussion",
+  "authorId": "id-utilisateur"
+}
+```
+
+#### POST `/getUserByEmail`
+**Description** : Récupère un utilisateur par son email.
+**Body attendu** :
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+#### POST `/getUserDiscussions`
+**Description** : Récupère toutes les discussions d'un utilisateur avec leurs messages.
+**Body attendu** :
+```json
+{
+  "userId": "id-utilisateur"
+}
+```
+
+### Améliorations de l'agent
+- L'agent conserve l'historique des discussions et peut reconnaître les questions déjà posées ou rappeler des informations personnelles déjà données.
+- L'agent utilise la mémoire contextuelle pour fournir des réponses plus pertinentes.
+
+### Modifications techniques
+- Ajout des modèles `Document` et `DocumentChunk` dans Prisma pour la gestion documentaire.
+- Ajout de la gestion des rôles et de la création d'admin via script.
+- Sécurisation des routes par clé API.
+- Factorisation de la connexion Prisma avec le helper `withPrisma`.
+
+---
