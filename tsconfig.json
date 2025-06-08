@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "esnext", // Passage en module ESNext pour compatibilité avec type: module
+    "module": "commonjs", // Passage en module ESNext pour compatibilité avec type: module
     "rootDir": ".",          // Racine du projet
     "outDir": "./dist",      // Dossier de sortie
     "strict": true,          // Vérifications strictes

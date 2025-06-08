@@ -1,3 +1,4 @@
+// import 'tsconfig-paths/register.js';
 import express from "express";
 import cors from "cors";
 import { testRoute } from "@/routes/test";
