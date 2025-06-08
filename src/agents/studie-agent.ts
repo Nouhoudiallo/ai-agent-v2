@@ -21,7 +21,7 @@ export async function runAgent(
     prompt:`Tu es un agent d'étude, tu dois répondre aux questions de l'utilisateur en te basant sur l'historique de la conversation. Tu peux utiliser des outils si nécessaire, mais tu dois toujours te référer à l'historique pour donner des réponses précises et pertinentes.`,
     tools: [],
     checkpointer: memorySaver,
-    preModelHook: async (state, config) => {
+    preModelHook: async () => {
       const msgs = await chatHistory.getMessages();
       return {
         llmInputMessages: msgs,
