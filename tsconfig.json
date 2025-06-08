@@ -1,15 +1,19 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "esnext", // Passage en module ESNext pour compatibilité avec type: module
     "rootDir": ".",          // Racine du projet
     "outDir": "./dist",      // Dossier de sortie
     "strict": true,          // Vérifications strictes
     "esModuleInterop": true, // Interopérabilité avec les modules ES
     "skipLibCheck": true,    // Ignore les vérifications des types des bibliothèques
     "baseUrl": ".",          // Définit la base des chemins relatifs
-    
-    "typeRoots": ["./node_modules/@types", "./generated/prisma/runtime"]
+    "typeRoots": ["./node_modules/@types", "./generated/prisma/runtime"],
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
     "src/**/*",               // Inclure tous les fichiers dans src/

@@ -1,4 +1,5 @@
-import { createStudieAgentWithMemory } from "../agents/studie-agent";
+
+import { runAgent } from "@/agents/studie-agent";
 import { createDiscussion, addMessageToDiscussion } from "../fontions/user";
 import { Sender } from "@prisma/client";
 import { Request, Response } from "express";
@@ -22,17 +23,19 @@ export const handleAsk = async (req: Request, res: Response) => {
     await addMessageToDiscussion(discussion, question, Sender.USER);
 
     // Appeler l'agent avec mémoire
-    const agent = await createStudieAgentWithMemory(discussion);
-    if (!agent || !agent.chatWithAgent) {
+    const agent = await runAgent(discussionId, {
+      role: "human",
+      content: question,
+    });
+    if (!agent) {
       res.status(500).json({ error: "Erreur lors de l'initialisation de l'agent" });
       return;
     }
-    const response = await agent.chatWithAgent(question);
 
     // Stocker la réponse de l'agent
-    await addMessageToDiscussion(discussion, response, Sender.AGENT);
+    await addMessageToDiscussion(discussion, agent, Sender.AGENT);
 
-    res.status(200).json({ response, discussionId: discussion });
+    res.status(200).json({ agent, discussionId: discussion });
   } catch (error: any) {
     res.status(500).json({ error: "Erreur interne du serveur" });
   }

@@ -1,11 +1,13 @@
 import express from "express";
-import LoadEnv from "./src/config/dotenv";
-import { RouteAgent } from "./src/tools/RouteAgent";
-import { handleAsk } from "./src/routes/ask";
-import { handleUpdateUser } from "./src/routes/uptdateUser";
-import { handleUploadDocument } from "./src/routes/uploadDocument";
-import { handleAddUser } from "./src/routes/addUser";
-import { handleDeleteUser } from "./src/routes/deleteUser";
+import cors from "cors";
+import { testRoute } from "@/routes/test";
+import { handleAsk } from "@/routes/ask";
+import { handleAddUser } from "@/routes/addUser";
+import { handleUpdateUser } from "@/routes/uptdateUser";
+import { handleDeleteUser } from "@/routes/deleteUser";
+import { handleUploadDocument } from "@/routes/uploadDocument";
+import { RouteAgent } from "@/tools/RouteAgent";
+import LoadEnv from "@/config/dotenv";
 
 LoadEnv.load();
 
@@ -14,17 +16,18 @@ const agent = new RouteAgent();
 
 // Ajout du middleware express.json() pour traiter les corps de requêtes JSON
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 agent.createRoute("/api/ask", "post", handleAsk);
 agent.createRoute("/api/add-user", "post", handleAddUser);
 agent.createRoute("/api/update-user", "post", handleUpdateUser);
 agent.createRoute("/api/delete-user", "post", handleDeleteUser);
 agent.createRoute("/api/upload-document", "post", handleUploadDocument);
-agent.createRoute("/api/test", "get", (req, res)=> {
-  res.status(200).json({
-    message: "Test réussi",
-  });
-});
+agent.createRoute("/api/test", "get", testRoute);
 
 app.use(agent.getRouter());
 

@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon index.ts",
+    "dev": "tsx watch index.ts",
     "base": "npx prisma studio",
     "build": "npx prisma generate && tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "agent": "tsx watch src/agents/studie-agent.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,7 @@
     "@langchain/community": "^0.3.45",
     "@langchain/core": "^0.3.57",
     "@langchain/google-genai": "^0.2.10",
+    "@langchain/langgraph": "^0.3.1",
     "@prisma/client": "^6.9.0",
     "@types/bcrypt": "^5.0.2",
     "axios": "^1.9.0",
@@ -30,14 +33,21 @@
     "pdf-parse": "^1.1.1",
     "prisma": "^6.9.0",
     "sqlite3": "^5.1.7",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "zod": "^3.25.56"
   },
   "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.2",
     "@types/multer": "^1.4.13",
     "@types/node": "^22.15.29",
-    "nodemon": "^3.1.10",
+    "eslint": "^9.28.0",
+    "globals": "^16.2.0",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3"
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.1"
   }
 }

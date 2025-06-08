@@ -4,7 +4,7 @@ import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 function getGeminiModel() {
   return new ChatGoogleGenerativeAI({
     apiKey: process.env.GOOGLE_GEMINI_API_KEY,
-    model: "gemini-2.5-flash-preview-04-17",
+    model: "gemini-1.5-flash",
     temperature: 0.7,
   });
 }
