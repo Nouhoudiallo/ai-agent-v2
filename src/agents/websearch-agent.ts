@@ -22,8 +22,12 @@ export async function createWebSearchAgent() {
         console.log("Commande non reconnue. Utilisez 'search:<votre requête>' pour effectuer une recherche sur le web.");
       }
     });
-  } catch (error: any) {
-    console.error("Erreur lors de la création de l'agent de recherche sur le web :", error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Erreur lors de la création de l'agent de recherche sur le web :", error.message);
+    } else {
+      console.error("Erreur lors de la création de l'agent de recherche sur le web :", error);
+    }
     return;
   }
 }

@@ -37,6 +37,6 @@ export const handleAsk = async (req: Request, res: Response) => {
 
     res.status(200).json({ agent, discussionId: discussion });
   } catch (error: any) {
-    res.status(500).json({ error: "Erreur interne du serveur" });
+    res.status(500).json({ error: error.message || "Erreur inconnue" });
   }
 };

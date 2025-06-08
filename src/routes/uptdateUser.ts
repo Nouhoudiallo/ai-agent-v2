@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {withPrisma} from "../methode/withPrisma"
 export const handleUpdateUser = withPrisma(
   async (req, res, prisma) =>{

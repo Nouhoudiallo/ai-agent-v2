@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "tsx watch index.ts",
     "base": "npx prisma studio",
-    "build": "npx prisma generate && tsc",
+    "build": "eslint src --ext .ts && npx prisma generate && tsc",
     "start": "node dist/index.js",
     "agent": "tsx watch src/agents/studie-agent.ts"
   },

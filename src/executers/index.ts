@@ -1,7 +1,6 @@
 import { getGeminiModel } from "../tools/models";
 import { tools } from "../tools/tools";
 import { initializeAgentExecutorWithOptions } from "langchain/agents";
-import { PromptTemplate } from "@langchain/core/prompts";
 
 export async function createAgentExecutor() {
   const model = getGeminiModel();

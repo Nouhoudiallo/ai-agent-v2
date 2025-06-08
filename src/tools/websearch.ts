@@ -1,4 +1,3 @@
-import LoadEnv from "../config/dotenv"; // Correction du chemin d'importation
 import axios from 'axios';
 
 /**

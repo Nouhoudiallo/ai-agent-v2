@@ -40,8 +40,7 @@ export async function createApiKey(userId:string): Promise<string> {
 
 
     return apiKey.key;
-  } catch (error:any) {
+  } catch (error ) {
     console.error("Erreur lors de la création de la clé API :", error)
-    return error.message;
-  }
-}
+    return error instanceof Error ? error.message : "Une erreur inconnue est survenue lors de la création de la clé API."
+}}

@@ -1,6 +1,6 @@
 import Prisma from "../utils/prisma";
 
-export async function createAdmin(): Promise<{ id: string; [key: string]: any } | undefined> {
+export async function createAdmin() {
   try {
     const admin = await Prisma.user.create({
       data: {
@@ -15,7 +15,7 @@ export async function createAdmin(): Promise<{ id: string; [key: string]: any } 
 
     console.log("Admin créé avec succès :", admin);
     return admin;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Erreur lors de la création de l'admin :", error);
   }
 }

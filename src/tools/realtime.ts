@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import readline from "readline";
 import axios from "axios";
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // Extension de l'interface Request pour inclure le champ 'file' de Multer
 import type { Request } from 'express';
 import type { File as MulterFile } from 'multer';

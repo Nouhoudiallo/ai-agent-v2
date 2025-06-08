@@ -41,6 +41,6 @@ export const handleAddUser = withPrisma(async (req, res, prisma) => {
 
     // console.log("User added successfully:", insertUser);
   } catch (error) {
-    res.status(500).json({ error: "Erreur interne du serveur" });
+    res.status(500).json({ error: error instanceof Error ? error.message : "Erreur inconnue" });
   }
 });
