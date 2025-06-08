@@ -17,7 +17,8 @@
   },
   "include": [
     "src/**/*",               // Inclure tous les fichiers dans src/
-    "index.ts"            // Inclure aussi le fichier index.ts à la racine
+    "index.ts" ,
+    "node_modules/@types"           // Inclure aussi le fichier index.ts à la racine
   ],
   "exclude": [
     "node_modules",
