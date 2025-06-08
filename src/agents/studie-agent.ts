@@ -1,6 +1,8 @@
 import LoadEnv from "@/config/dotenv";
 import { getGeminiModel } from "@/tools/models";
+// @ts-ignore
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
+// @ts-ignore
 import { MemorySaver } from "@langchain/langgraph";
 import Prisma from "@/utils/prisma";
 import { PrismaChatHistory } from "@/methode/CustomMemorySaver";
