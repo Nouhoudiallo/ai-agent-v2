@@ -1,4 +1,4 @@
-import { getGeminiModel } from "../tools/models";
+import { getGeminiModel } from "../models/models";
 import { tools } from "../tools/tools";
 import { initializeAgentExecutorWithOptions } from "langchain/agents";
 

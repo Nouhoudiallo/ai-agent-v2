@@ -7,7 +7,7 @@ import { handleAddUser } from "@/routes/addUser";
 import { handleUpdateUser } from "@/routes/uptdateUser";
 import { handleDeleteUser } from "@/routes/deleteUser";
 import { handleUploadDocument } from "@/routes/uploadDocument";
-import { RouteAgent } from "@/tools/RouteAgent";
+import { RouteAgent } from "@/methode/RouteAgent";
 import LoadEnv from "@/config/dotenv";
 
 LoadEnv.load();
