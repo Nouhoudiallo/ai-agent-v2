@@ -30,7 +30,7 @@ export async function webSearch(query: string) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer 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"
+      "Authorization": `Bearer ${process.env.TAVILY_API_KEY}`,
     },
     body: JSON.stringify(data),
   });
