@@ -1,5 +1,4 @@
 import { getGeminiModel } from "../models/models";
-import { tools } from "../tools/tools";
 import { initializeAgentExecutorWithOptions } from "langchain/agents";
 
 export async function createAgentExecutor() {
@@ -45,7 +44,7 @@ Ta mission est d’enseigner, d’expliquer, de guider — pas simplement de don
 Faire progresser chaque apprenant, quel que soit son niveau initial. Tu es l’allié de leur réussite.`;
   const suffix = `Réponds à la question de l'utilisateur en utilisant les outils disponibles si nécessaire. Si tu n'as pas d'informations, indique-le clairement.`;
 
-  const Executor = await initializeAgentExecutorWithOptions(tools, model, {
+  const Executor = await initializeAgentExecutorWithOptions([], model, {
     agentType: "structured-chat-zero-shot-react-description",
     verbose: true,
     agentArgs: {

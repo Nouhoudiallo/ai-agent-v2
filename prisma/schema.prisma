@@ -30,6 +30,8 @@ model User {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   role        ROLE         @default(USER)
+  token       String?      @unique
+  tokenExpiry DateTime?    @default(now())
   discussions Discussion[]
   apiKeys     ApiKey[]
   documents   Document[]   // Ajout de la relation avec Document
