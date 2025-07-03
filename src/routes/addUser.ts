@@ -42,6 +42,12 @@ export const handleAddUser = withPrisma(async (req, res, prisma) => {
         token,
         tokenExpiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       }, // 7 jours
+      select: {
+        id: true,
+        email: true,
+        token: true,
+        tokenExpiry: true,
+      },
     });
 
     res.status(200).json({

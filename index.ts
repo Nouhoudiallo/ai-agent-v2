@@ -9,6 +9,7 @@ import { handleDeleteUser } from "@/routes/deleteUser";
 import { handleUploadDocument } from "@/routes/uploadDocument";
 import { RouteAgent } from "@/methode/RouteAgent";
 import LoadEnv from "@/config/dotenv";
+import { getUserByEmail } from "@/routes/getUserByEmail";
 
 LoadEnv.load();
 
@@ -19,12 +20,14 @@ const agent = new RouteAgent();
 app.use(express.json());
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000", // Remplacez par l'URL de votre frontend
   })
 );
 
+
 agent.createRoute("/api/ask", "post", handleAsk);
 agent.createRoute("/api/add-user", "post", handleAddUser);
+agent.createRoute("/api/get-user-by-email", "post", getUserByEmail);
 agent.createRoute("/api/update-user", "post", handleUpdateUser);
 agent.createRoute("/api/delete-user", "post", handleDeleteUser);
 agent.createRoute("/api/upload-document", "post", handleUploadDocument);

@@ -7,7 +7,7 @@
     "dev": "npx prisma generate && tsx watch index.ts npm run base",
     "base": "npx prisma studio",
     "dev-build": "eslint src --ext .ts && npx prisma generate && tsc",
-    "build": "tsup",
+    "build": "npx prisma generate --no-engine && tsup",
     "start": "node dist/index.mjs",
     "agent": "tsx watch src/agents/studie-agent.ts"
   },
