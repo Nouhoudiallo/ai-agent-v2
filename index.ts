@@ -24,13 +24,16 @@ app.use(
   })
 );
 
-
+// Ajout des routes pour la gestion des questions
 agent.createRoute("/api/ask", "post", handleAsk);
+// Ajout des routes pour la gestion des utilisateurs
 agent.createRoute("/api/add-user", "post", handleAddUser);
 agent.createRoute("/api/get-user-by-email", "post", getUserByEmail);
 agent.createRoute("/api/update-user", "post", handleUpdateUser);
 agent.createRoute("/api/delete-user", "post", handleDeleteUser);
+// Ajout de la route pour le téléchargement de documents
 agent.createRoute("/api/upload-document", "post", handleUploadDocument);
+// Ajout de la route de test
 agent.createRoute("/api/test", "get", testRoute);
 
 app.use(agent.getRouter());
